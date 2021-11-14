@@ -1,0 +1,42 @@
+{
+  "alevel": {
+    "edexcel": {
+      "physics": {
+        "template": "https://www.physicsandmathstutor.com/past-papers/a-level-physics/edexcel-unit-%d/",
+        "lastunit": 6
+      },
+      "biology": {
+        "template": "https://www.physicsandmathstutor.com/past-papers/a-level-biology/edexcel-unit-%d/",
+        "lastunit": 6
+      },
+      "chemistry": {
+        "template": "https://www.physicsandmathstutor.com/past-papers/a-level-chemistry/edexcel-unit-%d/",
+        "lastunit": 6
+      },
+      "psychology": {
+        "template": "https://www.physicsandmathstutor.com/past-papers/a-level-psychology/edexcel-ial-paper-%d/",
+        "lastunit": 4
+      },
+      "geography": {
+        "template": "https://www.physicsandmathstutor.com/past-papers/a-level-geography/edexcel-unit-%d/",
+        "lastunit": 4
+      },
+      "economics": {
+        "template": "https://www.physicsandmathstutor.com/past-papers/a-level-economics/edexcel-unit-%d/",
+        "lastunit": 4
+      },
+      "english-literature": {
+        "template": "https://www.physicsandmathstutor.com/past-papers/a-level-english-literature/edexcel-ial-unit-%d/",
+        "lastunit": 4
+      },
+      "history": {
+        "template": "https://www.physicsandmathstutor.com/past-papers/a-level-history/edexcel-ial-paper-%d/",
+        "lastunit": 4
+      },
+      "english-language": {
+        "template": "https://www.physicsandmathstutor.com/past-papers/a-level-english-language/edexcel-ial-unit-%d/",
+        "lastunit": 4
+      }
+    }
+  }
+}
