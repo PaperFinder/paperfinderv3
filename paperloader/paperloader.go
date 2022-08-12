@@ -36,6 +36,19 @@ func LoadPapers() {
 	}
 
 	pfolder := os.Getenv("PAPER_FOLDER")
+
+	if _, err := os.Stat(pfolder); !os.IsNotExist(err) {
+		fmt.Print("Past paper folder already exists, skip? (Y/n) ")
+		var resp string
+		fmt.Scanln(&resp)
+		resp = strings.TrimSpace(resp)
+		if !(resp == "n" || resp == "N") {
+			fmt.Println("Skipping...")
+			return
+		}
+	}
+	fmt.Println("Redownloading papers...")
+
 	pfoldertemp := pfolder + "_temp"
 	os.RemoveAll(pfoldertemp)
 	os.Mkdir(pfoldertemp, os.ModePerm)
