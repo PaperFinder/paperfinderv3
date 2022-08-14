@@ -9,6 +9,7 @@ import (
 	"paperfinderv3/paperloader"
 	"paperfinderv3/server"
 	"path"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -20,6 +21,12 @@ func init() {
 	err := godotenv.Load()
 	if err != nil {
 		fmt.Println("Cannot find .env file")
+		os.Exit(1)
+	}
+
+	_, err = strconv.Atoi(os.Getenv("SEARCH_THRESHOLD"))
+	if err != nil {
+		fmt.Println("Invalid search threshold")
 		os.Exit(1)
 	}
 }

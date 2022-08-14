@@ -33,6 +33,14 @@ form {
     padding: 10px;
 }
 
+footer {
+    margin: auto;
+    width: 50%;
+    margin-top: 3cm;
+    padding: 10px;
+    text-align: center;
+}
+
 .title_container {
     margin: auto;
     padding: 10px;
@@ -91,4 +99,12 @@ button:hover {
 
 button:active {
     background-color: var(--main-darker);
+}
+
+a {
+    color: var(--black);
+}
+
+a:visited {
+    color: var(--black);
 }

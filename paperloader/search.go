@@ -4,8 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 	"path"
 	"sort"
+	"strconv"
 	"time"
 )
 
@@ -41,7 +43,8 @@ func Search(query string, subject string) ([]string, error) {
 
 	papers := make([]string, 0, len(resultsMap))
 	for k, v := range resultsMap {
-		if float64(v) >= float64(len(tokens))*0.8 {
+		percentage, _ := strconv.Atoi(os.Getenv("SEARCH_THRESHOLD"))
+		if float64(v) >= float64(len(tokens))*(float64(percentage)/100) {
 			papers = append(papers, k)
 		}
 	}

@@ -33,12 +33,15 @@ Example .env
 PAPER_CONFIG=papers.json
 PAPER_FOLDER=_pastpapers
 MANGLE_KEY=secret
+SEARCH_THRESHOLD=80
 
 HTTP_PORT=8080
 ```
 
 ## Upcoming
 
-[ ] HTTPS support
-[ ] Better design
-[ ] Support for more subjects, exams and exam boards
+- [ ] HTTPS support
+
+- [ ] Better design
+
+- [ ] Support for more subjects, exams and exam boards
