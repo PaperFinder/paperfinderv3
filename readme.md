@@ -41,7 +41,5 @@ HTTP_PORT=8080
 ## Upcoming
 
 - [ ] HTTPS support
-
 - [ ] Better design
-
 - [ ] Support for more subjects, exams and exam boards
