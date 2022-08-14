@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
+	"path"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -36,17 +38,6 @@ func LoadPapers() {
 	}
 
 	pfolder := os.Getenv("PAPER_FOLDER")
-
-	if _, err := os.Stat(pfolder); !os.IsNotExist(err) {
-		fmt.Print("Past paper folder already exists, skip? (Y/n) ")
-		var resp string
-		fmt.Scanln(&resp)
-		resp = strings.TrimSpace(resp)
-		if !(resp == "n" || resp == "N") {
-			fmt.Println("Skipping...")
-			return
-		}
-	}
 	fmt.Println("Redownloading papers...")
 
 	pfoldertemp := pfolder + "_temp"
@@ -74,6 +65,7 @@ func LoadPapers() {
 
 					res, err := http.Get(fmt.Sprintf(subject.Template, unit))
 					if err != nil {
+						IsLoading = false
 						panic(err)
 					}
 
@@ -102,6 +94,17 @@ func LoadPapers() {
 						io.Copy(f, resp.Body)
 						bar.Add(1)
 
+						ext := path.Ext(filename)
+						imgFile := filename[0:len(filename)-len(ext)] + ".jpg"
+
+						cmd := exec.Command("convert", "-density", "300", filename+"[0]", "-background", "#ffffff", "-flatten", imgFile)
+
+						err = cmd.Run()
+						if err != nil {
+							IsLoading = false
+							panic(err)
+						}
+
 						resp.Body.Close()
 						f.Close()
 					})
@@ -120,6 +123,8 @@ func LoadPapers() {
 	os.Chdir("..")
 	os.RemoveAll(pfolder)
 	os.Rename(pfoldertemp, pfolder)
+
+	IsLoading = false
 }
 
 func generateFilename(name string) string {

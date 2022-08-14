@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="css/search.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <form autocomplete="off" action="/search">
+        <div class="wrapper">
+          <select required="required" name="s">
+            <option disabled selected value>-- Subject --</option>
+            {{$subj:=.Subject}} {{range .Subjects}}
+            <option {{if eq . $subj}}selected{{end}} value="{{.}}">
+              {{. | title}}
+            </option>
+            {{end}}
+          </select>
+          <input
+            required="required"
+            name="q"
+            type="text"
+            placeholder="Enter your question here"
+            value="{{.Query}}"
+          />
+          <button type="submit">
+            <img src="assets/mglass.svg" alt="Search" />
+          </button>
+        </div>
+      </form>
+      <p class="time">Found {{.Results | len}} result(s) in {{.Time}}</p>
+      <div class="result_container">
+        <b>Found question in:</b>
+        <div class="separator">&nbsp;</div>
+        <div class="results">
+          {{ range .Results}}
+          <a class="result" href="file/{{.URL | mangle}}">
+            <img
+              alt="{{.URL}}"
+              class="search_image"
+              src="image/{{.URL | img | mangle}}"
+            />
+            <p>
+              {{if .Specimen}} Specimen {{.Unit | title}} {{.Year}} {{if .IAL}}
+              IAL {{end}} {{else}} {{$subj | title}} {{.Unit | title}} {{.Year}}
+              {{if .IAL}} IAL {{end}} {{end}}
+            </p>
+          </a>
+          {{end}}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

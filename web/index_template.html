@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="css/index.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="title_container">
+        <span class="title">Paper Finder</span> v3
+      </div>
+      <form autocomplete="off" action="/search">
+        <div class="wrapper">
+          <select required="required" name="s">
+            <option disabled selected value>-- Subject --</option>
+            {{ range .Subjects}}
+            <option value="{{.}}">{{. | title}}</option>
+            {{ end }}
+          </select>
+          <input
+            required="required"
+            name="q"
+            type="text"
+            placeholder="Enter your question here"
+          />
+          <button type="submit">
+            <img src="assets/mglass.svg" alt="Search" />
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

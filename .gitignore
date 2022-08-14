@@ -1,4 +1,6 @@
 .env
 _pastpapers*
 *temp*
+!*template*
 database
+.vscode

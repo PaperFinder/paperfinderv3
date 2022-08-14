@@ -9,6 +9,7 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/mattn/go-sqlite3 v1.14.14
 	github.com/schollz/progressbar/v3 v3.9.0
+	golang.org/x/text v0.3.7
 )
 
 require (
@@ -32,7 +33,6 @@ require (
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
 	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
 	golang.org/x/term v0.0.0-20220722155259-a9ba230a4035 // indirect
-	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

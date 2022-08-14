@@ -19,39 +19,40 @@ var db *sql.DB
 
 // EXCLUDE CHEMISTRY BECAUSE PDFTOTEXT CANT READ IT
 
+var Exclude = map[string]struct{}{
+	"chemistry": {},
+}
+
 func GenerateIndex() {
-	exclude := []string{"chemistry"}
+	IsLoading = true
+
+	fmt.Println("PRESS ENTER TO REGENERATE INDEX. PRESS CTRL+C TO CANCEL")
+	a := ""
+	fmt.Scanln(&a)
 
 	dbPath := path.Join("database", "index.db")
-	if _, err := os.Stat(dbPath); !os.IsNotExist(err) {
-		fmt.Print("Index already exists, skip? (Y/n) ")
-		var resp string
-		fmt.Scanln(&resp)
-		resp = strings.TrimSpace(resp)
-		if !(resp == "n" || resp == "N") {
-			fmt.Println("Skipping...")
-			return
-		}
-	}
 	fmt.Println("Rebuilding index...")
 
 	os.RemoveAll("database")
 	os.Mkdir("database", os.ModePerm)
 	f, err := os.Create(dbPath)
 	if err != nil {
+		IsLoading = false
 		panic(err)
 	}
 	f.Close()
 
 	db, err = sql.Open("sqlite3", dbPath)
 	if err != nil {
+		IsLoading = false
 		panic(err)
 	}
 	defer db.Close()
 
-	st, _ := db.Prepare("CREATE TABLE IF NOT EXISTS `tokens` (`term` VARCHAR NOT NULL,`file` VARCHAR NOT NULL);")
+	st, _ := db.Prepare("CREATE TABLE IF NOT EXISTS `tokens` (`term` VARCHAR NOT NULL,`file` VARCHAR NOT NULL, `subject` VARCHAR NOT NULL);")
 	_, err = st.Exec()
 	if err != nil {
+		IsLoading = false
 		panic(err)
 	}
 	st.Close()
@@ -59,27 +60,25 @@ func GenerateIndex() {
 	err = filepath.Walk(os.Getenv("PAPER_FOLDER"),
 		func(fpath string, info fs.FileInfo, err error) error {
 			if err != nil {
+				IsLoading = false
 				panic(err)
 			}
 			if info.IsDir() {
 				return nil
 			}
-			if path.Ext(fpath) == ".txt" {
+			if path.Ext(fpath) != ".pdf" {
 				return nil
 			}
 
-			found := false
-			for _, e := range exclude {
-				found = strings.Contains(fpath, e)
-				if found {
-					return nil
-				}
+			if _, ok := Exclude[strings.Split(fpath, string(os.PathSeparator))[3]]; ok {
+				return nil
 			}
 
 			cmd := exec.Command("pdftotext", "-f", "2", "-q", fpath)
 
 			err = cmd.Run()
 			if err != nil {
+				IsLoading = false
 				panic(err)
 			}
 			ext := path.Ext(fpath)
@@ -87,16 +86,18 @@ func GenerateIndex() {
 
 			data, err := os.ReadFile(output)
 			if err != nil {
+				IsLoading = false
 				panic(err)
 			}
 			os.Remove(output)
 			newData := filterText(string(data))
 
-			indexAndWrite(newData, fpath)
+			indexAndWrite(newData, fpath, strings.Split(fpath, string(os.PathSeparator))[3])
 
 			return nil
 		})
 	if err != nil {
+		IsLoading = false
 		panic(err)
 	}
 }
@@ -124,7 +125,7 @@ func filterText(dataIn string) []string {
 
 	words := strings.Split(out, " ")
 	fw := make([]string, 0, len(words))
-	stopWords := map[string]struct{}{
+	commonWords := map[string]struct{}{
 		"the":  {},
 		"of":   {},
 		"and":  {},
@@ -149,7 +150,7 @@ func filterText(dataIn string) []string {
 	}
 
 	for _, word := range words {
-		if _, ok := stopWords[word]; ok {
+		if _, ok := commonWords[word]; ok {
 			continue
 		}
 		fw = append(fw, word)
@@ -157,15 +158,18 @@ func filterText(dataIn string) []string {
 
 	fw = unique(fw)
 
+	if len(fw) == 1 && fw[0] == "" {
+		return []string{}
+	}
 	return fw
 }
 
-func indexAndWrite(tokens []string, fpath string) {
+func indexAndWrite(tokens []string, fpath string, subject string) {
 	fmt.Println(fpath)
 	bar := progressbar.NewOptions(len(tokens), progressbar.OptionSetWidth(len(fpath)))
 	for _, tok := range tokens {
-		st, _ := db.Prepare("INSERT INTO tokens (term, file) VALUES  (?, ?);")
-		_, err := st.Exec(tok, fpath)
+		st, _ := db.Prepare("INSERT INTO tokens (term, file, subject) VALUES  (?, ?, ?);")
+		_, err := st.Exec(tok, fpath, subject)
 		if err != nil {
 			panic(err)
 		}
