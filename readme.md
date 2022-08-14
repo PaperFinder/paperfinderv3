@@ -22,6 +22,7 @@ The third iteration of this godforsaken piece of junk
 - To start the web server run with no flags
 
 `MANGLE_KEY` environment variable is a secret key to prevent scraping from server
+
 `SEARCH_THRESHOLD` environment variable soecifies the % of words that have to match for a search to come as valid
 
 ## Environment
