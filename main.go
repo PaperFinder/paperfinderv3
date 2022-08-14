@@ -60,6 +60,12 @@ func main() {
 			ext := path.Ext(in)
 			return in[0:len(in)-len(ext)] + ".jpg"
 		},
+		"trim": func(in string) string {
+			if len(in) <= 3 {
+				return in
+			}
+			return in[0:3]
+		},
 	})
 	r.LoadHTMLGlob("web/*_template.html")
 

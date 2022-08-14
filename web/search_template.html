@@ -47,9 +47,10 @@
               src="image/{{.URL | img | mangle}}"
             />
             <p>
-              {{if .Specimen}} Specimen {{.Unit | title}} {{.Year}} {{if .IAL}}
-              IAL {{end}} {{else}} {{$subj | title}} {{.Unit | title}} {{.Year}}
-              {{if .IAL}} IAL {{end}} {{end}}
+              {{if .Specimen}} Specimen {{.Unit | title}} {{.Month | title |
+              trim}} {{.Year}} {{if .IAL}} IAL {{end}} {{else}} {{$subj |
+              title}} {{.Unit | title}} {{.Month | title | trim}} {{.Year}} {{if
+              .IAL}} IAL {{end}} {{end}}
             </p>
           </a>
           {{end}}
