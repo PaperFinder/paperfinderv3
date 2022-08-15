@@ -43,6 +43,7 @@ func GenerateSearchResults(c *gin.Context) {
 
 	if !oks || !okq {
 		c.JSON(http.StatusBadRequest, "query or subject is empty")
+		return
 	}
 
 	start := time.Now()
